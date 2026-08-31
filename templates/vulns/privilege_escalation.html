@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Privilege Escalation - A01{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h3>Privilege Escalation</h3>
+        <p class="text-muted">A01: Broken Access Control - Difficulty: <strong>{{ security_level }}</strong></p>
+
+        {% if security_level == "LOW" %}
+        <div class="alert alert-danger">
+            <strong>Vulnerable:</strong> No authorization checks. Anyone can make themselves admin.
+        </div>
+        {% elif security_level == "MEDIUM" %}
+        <div class="alert alert-warning">
+            <strong>Partial:</strong> Role field in form but no server-side role validation.
+        </div>
+        {% else %}
+        <div class="alert alert-success">
+            <strong>Secure:</strong> Only current admins can promote users.
+        </div>
+        {% endif %}
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Make User Admin</h5>
+                <form method="POST">
+                    <input type="hidden" name="action" value="make_admin">
+                    <div class="input-group">
+                        <select name="user_id" class="form-select">
+                            {% for user in users %}
+                            <option value="{{ user.id }}">{{ user.username }} ({{ user.role }})</option>
+                            {% endfor %}
+                        </select>
+                        {% if security_level == "MEDIUM" %}
+                        <select name="role" class="form-select">
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                        {% endif %}
+                        <button type="submit" class="btn btn-danger">Promote</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% if message %}
+        <div class="alert alert-info">{{ message }}</div>
+        {% endif %}
+
+        <div class="card">
+            <div class="card-body">
+                <h5>All Users:</h5>
+                <table class="table table-dark table-sm">
+                    <thead><tr><th>ID</th><th>Username</th><th>Role</th><th>Admin</th></tr></thead>
+                    <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.role }}</td>
+                        <td>{{ user.is_admin }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

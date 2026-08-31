@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Debug Console - A02{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h3>Werkzeug Debug Console</h3>
+        <p class="text-muted">A02: Security Misconfiguration - Difficulty: <strong>{{ security_level }}</strong></p>
+
+        {% if security_level == "LOW" %}
+        <div class="alert alert-danger">
+            <strong>Dangerous:</strong> The Werkzeug debugger is enabled. This allows arbitrary code execution!
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <p>Try accessing the debugger at: <code>/console</code> or trigger an error to see the console.</p>
+                <p>With the debugger, an attacker can:</p>
+                <ul>
+                    <li>Execute arbitrary Python code</li>
+                    <li>Read/modify any file on the server</li>
+                    <li>Access the database directly</li>
+                    <li>Install backdoors</li>
+                </ul>
+                <code>curl http://localhost:5000/vulns/misconfig/error</code>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-success">
+            <strong>Secure:</strong> Debug console is disabled in production.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Exceptions - A10{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h3>Mishandling of Exceptional Conditions</h3>
+        <p class="text-muted">A10: Exceptional Conditions - Difficulty: <strong>{{ security_level }}</strong></p>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>Trigger Application Error</h5>
+                <p>See how errors are handled at different difficulty levels.</p>
+                <a href="/vulns/exceptions/error" class="btn btn-secondary btn-sm">Trigger Error</a>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>API Error Response</h5>
+                <p>Check the error response format.</p>
+                <a href="/vulns/exceptions/api-error" class="btn btn-secondary btn-sm">Trigger API Error</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

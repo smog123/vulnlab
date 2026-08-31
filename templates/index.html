@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <h1>VulnLab Dashboard</h1>
+        <p class="text-muted">Intentionally vulnerable web application for practicing OWASP Top 10 (2025). Current difficulty: <strong class="text-danger">{{ security_level }}</strong></p>
+        <div class="alert alert-warning">
+            <strong>WARNING:</strong> This application is intentionally vulnerable. Never deploy in production. Use only for local security training.
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card border-danger">
+            <div class="card-body">
+                <h5 class="card-title">A05: Injection</h5>
+                <p class="card-text">SQL Injection, XSS (Reflected/Stored/DOM), Command Injection</p>
+                <a href="/vulns/sqli" class="btn btn-danger btn-sm">SQLi</a>
+                <a href="/vulns/xss" class="btn btn-danger btn-sm">XSS</a>
+                <a href="/vulns/command_injection" class="btn btn-danger btn-sm">Cmdi</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card border-danger">
+            <div class="card-body">
+                <h5 class="card-title">A01: Broken Access Control</h5>
+                <p class="card-text">IDOR, Privilege Escalation, CORS Misconfiguration, CSRF</p>
+                <a href="/vulns/idor" class="btn btn-danger btn-sm">IDOR</a>
+                <a href="/vulns/privilege_escalation" class="btn btn-danger btn-sm">Privesc</a>
+                <a href="/vulns/csrf" class="btn btn-danger btn-sm">CSRF</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card border-danger">
+            <div class="card-body">
+                <h5 class="card-title">A07: Authentication Failures</h5>
+                <p class="card-text">Brute Force, Weak Passwords, Session Fixation, JWT Flaws</p>
+                <a href="/vulns/broken_auth" class="btn btn-danger btn-sm">Auth</a>
+                <a href="/auth/login" class="btn btn-danger btn-sm">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card border-warning">
+            <div class="card-body">
+                <h5 class="card-title">A04: Cryptographic Failures</h5>
+                <p class="card-text">Weak Hashing, Plaintext Passwords, Hardcoded Keys</p>
+                <a href="/vulns/weak_crypto" class="btn btn-warning btn-sm">Crypto</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card border-warning">
+            <div class="card-body">
+                <h5 class="card-title">A02: Security Misconfiguration</h5>
+                <p class="card-text">Directory Listing, Verbose Errors, Debug Console</p>
+                <a href="/vulns/misconfig" class="btn btn-warning btn-sm">Misconfig</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card border-warning">
+            <div class="card-body">
+                <h5 class="card-title">A06: Insecure Design</h5>
+                <p class="card-text">Business Logic Bypass, Mass Assignment, No Rate Limit</p>
+                <a href="/vulns/insecure_design" class="btn btn-warning btn-sm">Design</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card border-info">
+            <div class="card-body">
+                <h5 class="card-title">A08: Data Integrity Failures</h5>
+                <p class="card-text">Insecure Deserialization, Unsigned Cookies</p>
+                <a href="/vulns/integrity" class="btn btn-info btn-sm">Integrity</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card border-info">
+            <div class="card-body">
+                <h5 class="card-title">A09: Logging & Alerting Failures</h5>
+                <p class="card-text">Silent Auth Failures, No Audit Trail</p>
+                <a href="/vulns/logging" class="btn btn-info btn-sm">Logging</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card border-secondary">
+            <div class="card-body">
+                <h5 class="card-title">A10: Exceptional Conditions</h5>
+                <p class="card-text">Stack Trace Leaks, Verbose Error Messages</p>
+                <a href="/vulns/exceptions" class="btn btn-secondary btn-sm">Exceptions</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card border-dark">
+            <div class="card-body">
+                <h5 class="card-title">API Security</h5>
+                <p class="card-text">BOLA, Mass Assignment, Injection via API</p>
+                <a href="/api/v1/docs" class="btn btn-dark btn-sm">API Docs</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}JWT Demo - A07 Auth Failures{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title mb-3">JWT Token Demo</h3>
+                <p class="text-muted">A07: Authentication Failures - JWT Implementation - Difficulty: <strong>{{ security_level }}</strong></p>
+
+                <h5>Generated Token:</h5>
+                <div class="result-box"><code>{{ token }}</code></div>
+
+                <h5 class="mt-3">Decoded Payload:</h5>
+                <div class="result-box"><pre>{{ decoded }}</pre></div>
+
+                {% if security_level == "LOW" %}
+                <div class="alert alert-danger mt-3">
+                    <strong>Vulnerable:</strong> Weak hardcoded secret ("jwt-secret"), long expiration (24h), predictable payload.
+                    Try decoding with: <code>echo '{{ token }}' | cut -d. -f2 | base64 -d</code>
+                </div>
+                {% elif security_level == "MEDIUM" %}
+                <div class="alert alert-warning mt-3">
+                    <strong>Improved:</strong> Uses config secret, but still 24h expiration. Token can be reused if leaked.
+                </div>
+                {% else %}
+                <div class="alert alert-success mt-3">
+                    <strong>Secure:</strong> Strong secret, 15min expiration, minimal claims. Tokens are short-lived.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

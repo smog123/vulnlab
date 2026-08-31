@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Security Misconfiguration - A02{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h3>Security Misconfiguration</h3>
+        <p class="text-muted">A02: Security Misconfiguration - Difficulty: <strong>{{ security_level }}</strong></p>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>Exposed Files</h5>
+                <p>Access sensitive files that shouldn't be publicly available.</p>
+                <a href="/vulns/misconfig/secret-files" class="btn btn-warning btn-sm">View Secret Files</a>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>Verbose Errors</h5>
+                <p>Trigger an error to see what information leaks.</p>
+                <a href="/vulns/misconfig/error" class="btn btn-warning btn-sm">Trigger Error</a>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>Debug Console</h5>
+                <p>Access the Werkzeug interactive debugger.</p>
+                <a href="/vulns/misconfig/debug" class="btn btn-warning btn-sm">Open Debug Console</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

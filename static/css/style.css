@@ -1,0 +1,37 @@
+body {
+    background-color: #1a1a2e;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.navbar { background-color: #16213e !important; }
+.card { background-color: #16213e; border-width: 2px; }
+.card-title { color: #fff; }
+.card-text { color: #b0b0b0; }
+.btn-danger { background-color: #e74c3c; border-color: #e74c3c; }
+.btn-warning { background-color: #f39c12; border-color: #f39c12; color: #000; }
+.btn-success { background-color: #27ae60; border-color: #27ae60; }
+code { background-color: #0d1117; padding: 2px 6px; border-radius: 4px; color: #e06c75; }
+.source-code {
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 15px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.85rem;
+    overflow-x: auto;
+    color: #c9d1d9;
+    display: none;
+}
+.source-code .vulnerable { color: #f85149; }
+.source-code .secure { color: #3fb950; }
+.source-code .comment { color: #8b949e; }
+.source-code .keyword { color: #ff7b72; }
+.source-code .string { color: #a5d6ff; }
+.result-box {
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 15px;
+    margin-top: 10px;
+    min-height: 50px;
+}

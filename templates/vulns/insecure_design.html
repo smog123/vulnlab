@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Insecure Design - A06{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h3>Insecure Design</h3>
+        <p class="text-muted">A06: Insecure Design - Difficulty: <strong>{{ security_level }}</strong></p>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>Business Logic Bypass</h5>
+                <p>Purchase an item with a discount coupon. Try to exploit the pricing logic.</p>
+                <a href="/vulns/insecure_design/purchase" class="btn btn-warning btn-sm">Try Purchase</a>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>Mass Assignment</h5>
+                <p>Create a user profile. Try to set yourself as admin.</p>
+                <a href="/vulns/insecure_design/profile" class="btn btn-warning btn-sm">Create Profile</a>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>No Rate Limiting</h5>
+                <p>Test the password reset endpoint for abuse.</p>
+                <a href="/vulns/insecure_design/reset-password" class="btn btn-warning btn-sm">Reset Password</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}SQL Injection - A05{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h3>SQL Injection</h3>
+        <p class="text-muted">A05: Injection - Difficulty: <strong>{{ security_level }}</strong></p>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Search Users</h5>
+                <form method="POST">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" placeholder="Search username...">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+                {% if security_level == "LOW" %}
+                <small class="text-muted">Hint: Try <code>' OR '1'='1</code> or <code>' UNION SELECT sql FROM sqlite_master--</code></small>
+                {% elif security_level == "MEDIUM" %}
+                <small class="text-muted">Hint: Basic quotes filtered. Try bypassing with double encoding or alternative syntax.</small>
+                {% else %}
+                <small class="text-muted">Parameterized queries prevent injection.</small>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if query_used %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6>Executed Query:</h6>
+                <code>{{ query_used }}</code>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if results %}
+        <table class="table table-dark">
+            <thead><tr><th>ID</th><th>Username</th><th>Email</th></tr></thead>
+            <tbody>
+            {% for row in results %}
+                <tr><td>{{ row[0] }}</td><td>{{ row[1] }}</td><td>{{ row[2] }}</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5>OWASP Reference</h5>
+                <p>A05:2025 - Injection</p>
+                <a href="https://owasp.org/Top10/2025/A05_2025-Injection/" target="_blank" class="btn btn-outline-info btn-sm">Read More</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

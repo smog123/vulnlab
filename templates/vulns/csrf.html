@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}CSRF - A01{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h3>Cross-Site Request Forgery (CSRF)</h3>
+        <p class="text-muted">A01: Broken Access Control - Difficulty: <strong>{{ security_level }}</strong></p>
+
+        {% if message %}
+        <div class="alert alert-{{ message_type }} alert-dismissible fade show">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+
+        <div class="card mb-4">
+            <div class="card-header bg-warning text-dark">
+                <strong>Vulnerable Form - Change Email</strong>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% if security_level != "LOW" %}
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    {% endif %}
+                    <input type="hidden" name="action" value="change_email">
+                    <div class="mb-3">
+                        <label class="form-label">New Email</label>
+                        <input type="email" name="email" class="form-control" value="{{ current_user.email if current_user.is_authenticated else '' }}">
+                    </div>
+                    <button type="submit" class="btn btn-warning">Update Email</button>
+                </form>
+                {% if security_level == "LOW" %}
+                <small class="text-danger">Vulnerable: No CSRF token. An attacker can forge this request from another site.</small>
+                {% elif security_level == "MEDIUM" %}
+                <small class="text-warning">Partial: Token exists but is predictable (MD5 of user ID). Can be brute-forced.</small>
+                {% else %}
+                <small class="text-success">Secure: Random 64-char token + SameSite cookies.</small>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-danger text-white">
+                <strong>Dangerous Action - Change Password</strong>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% if security_level != "LOW" %}
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    {% endif %}
+                    <input type="hidden" name="action" value="change_password">
+                    <div class="mb-3">
+                        <label class="form-label">New Password</label>
+                        <input type="password" name="new_password" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-danger">Change Password</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                <strong>Simulated Transfer</strong>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% if security_level != "LOW" %}
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    {% endif %}
+                    <input type="hidden" name="action" value="transfer_money">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Amount ($)</label>
+                            <input type="number" name="amount" class="form-control" value="100">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">To User</label>
+                            <select name="to_user" class="form-select">
+                                <option value="attacker">attacker</option>
+                                <option value="alice">alice</option>
+                                <option value="bob">bob</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-dark">Transfer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card border-danger mb-4">
+            <div class="card-body">
+                <h5>How CSRF Works</h5>
+                <p class="small">An attacker creates a malicious page that auto-submits a form to VulnLab:</p>
+                <pre class="bg-dark text-success p-2 small"><code>&lt;form method="POST"
+  action="http://localhost:5000/vulns/csrf"&gt;
+  &lt;input type="hidden"
+    name="action" value="change_email"&gt;
+  &lt;input type="hidden"
+    name="email" value="evil@attacker.com"&gt;
+&lt;/form&gt;
+&lt;script&gt;document.forms[0].submit()&lt;/script&gt;</code></pre>
+                <a href="/vulns/csrf/attacker" class="btn btn-danger btn-sm w-100">View Attacker Page</a>
+            </div>
+        </div>
+
+        <div class="card border-info mb-4">
+            <div class="card-body">
+                <h5>Current CSRF Token</h5>
+                {% if security_level == "LOW" %}
+                <code class="text-danger">None (no protection)</code>
+                {% else %}
+                <code class="text-break">{{ csrf_token }}</code>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card border-secondary">
+            <div class="card-body">
+                <h5>Security Levels</h5>
+                <ul class="small mb-0">
+                    <li><strong>LOW:</strong> No token at all</li>
+                    <li><strong>MEDIUM:</strong> Predictable token (MD5 of user ID)</li>
+                    <li><strong>HIGH:</strong> Cryptographically random token + SameSite=Strict</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

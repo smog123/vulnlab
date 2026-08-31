@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}API Documentation{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-10">
+        <h3>API Documentation</h3>
+        <p class="text-muted">RESTful API with OWASP API Security vulnerabilities</p>
+
+        <div class="alert alert-warning">
+            <strong>Current Level: {{ security_level }}</strong> - Switch difficulty using the navbar.
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Authentication</h5>
+                <code>POST /api/v1/auth/login</code>
+                <pre class="mt-2">{"username": "admin", "password": "admin123"}</pre>
+                <small>Returns JWT token. Low: 24h expiry, hardcoded secret. High: 15min expiry.</small>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>List Users (BOLA on LOW)</h5>
+                <code>GET /api/v1/users</code>
+                <pre class="mt-2">curl http://localhost:5000/api/v1/users</pre>
+                <small>LOW: Returns all user data. HIGH: Requires authentication.</small>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>User Notes (IDOR on LOW)</h5>
+                <code>GET /api/v1/users/&lt;id&gt;/notes</code>
+                <pre class="mt-2">curl http://localhost:5000/api/v1/users/1/notes</pre>
+                <small>LOW: Access any user's notes. HIGH: Only your own notes.</small>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Create Note (Mass Assignment on LOW)</h5>
+                <code>POST /api/v1/notes</code>
+                <pre class="mt-2">{"title": "Test", "content": "Hello", "user_id": 1, "is_private": false}</pre>
+                <small>LOW: Accepts all fields. HIGH: Only title + content accepted.</small>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Search Users (SQLi on LOW)</h5>
+                <code>GET /api/v1/search?q=&lt;query&gt;</code>
+                <pre class="mt-2">curl "http://localhost:5000/api/v1/search?q=admin' OR '1'='1"</pre>
+                <small>LOW: Vulnerable to SQL injection. HIGH: Parameterized query.</small>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Money Transfer (Business Logic on LOW)</h5>
+                <code>POST /api/v1/transfer</code>
+                <pre class="mt-2">{"amount": -100, "to_user_id": 1}</pre>
+                <small>LOW: Negative amounts allowed (give yourself money). HIGH: Amount validated.</small>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>File Upload (Unrestricted on LOW)</h5>
+                <code>POST /api/v1/upload</code>
+                <pre class="mt-2">curl -F "file=@malware.exe" http://localhost:5000/api/v1/upload</pre>
+                <small>LOW: Any file type. HIGH: Whitelist (jpg, png, pdf, txt only).</small>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Config Leak (Info Disclosure on LOW)</h5>
+                <code>GET /api/v1/config</code>
+                <pre class="mt-2">curl http://localhost:5000/api/v1/config</pre>
+                <small>LOW: Exposes secrets, DB path, JWT secret. HIGH: Only status ok.</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

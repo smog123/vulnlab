@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Weak Crypto - A04{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h3>Cryptographic Failures</h3>
+        <p class="text-muted">A04: Cryptographic Failures - Difficulty: <strong>{{ security_level }}</strong></p>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Password Hashing Comparison</h5>
+                <p>Password: <code>{{ demo_password }}</code></p>
+
+                <table class="table table-dark">
+                    <thead><tr><th>Method</th><th>Hash</th><th>Strength</th></tr></thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ method }}</td>
+                        <td><code>{{ hash_result[:60] }}{% if hash_result|length > 60 %}...{% endif %}</code></td>
+                        <td>{{ strength }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Hardcoded API Key</h5>
+                {% if security_level == "LOW" %}
+                <div class="alert alert-danger">
+                    <strong>VULNERABLE:</strong> Key hardcoded in source code:<br>
+                    <code>A04_HARDcoded_KEY = "{{ hardcoded_key }}"</code>
+                </div>
+                {% elif security_level == "MEDIUM" %}
+                <div class="alert alert-warning">
+                    <strong>Partially Mitigated:</strong> Key in config file (not source), but still in repo.
+                </div>
+                {% else %}
+                <div class="alert alert-success">
+                    <strong>Secure:</strong> Key loaded from environment variable, not in code.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5>Try Cracking</h5>
+                {% if security_level == "LOW" %}
+                <p>MD5 hashes can be reversed instantly:</p>
+                <code>echo -n "{{ demo_password }}" | md5sum</code>
+                <p class="mt-2">Or use online tools: <a href="https://crackstation.net/" target="_blank">crackstation.net</a></p>
+                {% elif security_level == "MEDIUM" %}
+                <p>SHA-256 is vulnerable to rainbow table attacks:</p>
+                <code>hashcat -m 1400 hash.txt wordlist.txt</code>
+                {% else %}
+                <p>bcrypt with cost 12 takes ~250ms per hash. Brute forcing is impractical.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

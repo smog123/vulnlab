@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Purchase - A06{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h3>Business Logic Bypass</h3>
+        <p class="text-muted">A06: Insecure Design - Difficulty: <strong>{{ security_level }}</strong></p>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Buy Premium Subscription - $49.99</h5>
+                <form method="POST">
+                    <input type="hidden" name="price" value="49.99">
+                    <div class="mb-3">
+                        <label class="form-label">Coupon Code</label>
+                        <input type="text" name="coupon" class="form-control" placeholder="Enter coupon code">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Purchase</button>
+                </form>
+                {% if security_level == "LOW" %}
+                <small class="text-danger">Hint: Try coupon codes: SAVE10, SAVE50, FREE, NEGATIVE</small>
+                {% elif security_level == "MEDIUM" %}
+                <small class="text-warning">Hint: Only valid coupons accepted. Try injecting negative values.</small>
+                {% else %}
+                <small class="text-success">Server validates final price cannot be negative.</small>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if message %}
+        <div class="alert alert-info">{{ message }}</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

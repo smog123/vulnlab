@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Command Injection - A05{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h3>Command Injection</h3>
+        <p class="text-muted">A05: Injection - Command Injection - Difficulty: <strong>{{ security_level }}</strong></p>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Ping Utility</h5>
+                <form method="POST">
+                    <div class="input-group">
+                        <input type="text" name="ip" class="form-control" placeholder="Enter IP address (e.g., 127.0.0.1)">
+                        <button type="submit" class="btn btn-primary">Ping</button>
+                    </div>
+                </form>
+                {% if security_level == "LOW" %}
+                <small class="text-danger">Vulnerable: Try <code>127.0.0.1; cat /etc/passwd</code> or <code>127.0.0.1 | whoami</code></small>
+                {% elif security_level == "MEDIUM" %}
+                <small class="text-warning">Partial: Semicolons and pipes blocked. Try <code>127.0.0.1$(whoami)</code> or backticks.</small>
+                {% else %}
+                <small class="text-success">Secure: IP validation + subprocess with list args.</small>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if output %}
+        <div class="card">
+            <div class="card-body">
+                <h5>Output:</h5>
+                <pre class="result-box">{{ output }}</pre>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

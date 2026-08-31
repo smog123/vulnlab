@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}CORS Misconfiguration - A01{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h3>CORS Misconfiguration</h3>
+        <p class="text-muted">A01: Broken Access Control - Difficulty: <strong>{{ security_level }}</strong></p>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>CORS Configuration Demo</h5>
+                <p>Check the response headers when accessing <code>/api/v1/user_data</code>:</p>
+                <code>curl -I -H "Origin: http://evil.com" http://localhost:5000/api/v1/user_data</code>
+
+                {% if security_level == "LOW" %}
+                <div class="alert alert-danger mt-3">
+                    <strong>Vulnerable:</strong> Access-Control-Allow-Origin: * (any origin allowed)
+                </div>
+                {% elif security_level == "MEDIUM" %}
+                <div class="alert alert-warning mt-3">
+                    <strong>Partial:</strong> Reflects Origin header (still exploitable)
+                </div>
+                {% else %}
+                <div class="alert alert-success mt-3">
+                    <strong>Secure:</strong> Strict origin allowlist only
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

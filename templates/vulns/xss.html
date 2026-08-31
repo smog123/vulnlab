@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}XSS - A05{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h3>Cross-Site Scripting (XSS)</h3>
+        <p class="text-muted">A05: Injection - Stored XSS - Difficulty: <strong>{{ security_level }}</strong></p>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Post a Comment</h5>
+                <form method="POST">
+                    <div class="mb-3">
+                        <input type="text" name="title" class="form-control" placeholder="Title" value="XSS Comment">
+                    </div>
+                    <div class="mb-3">
+                        <textarea name="comment" class="form-control" rows="3" placeholder="Write your comment..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Post Comment</button>
+                </form>
+                {% if security_level == "LOW" %}
+                <small class="text-danger">Vulnerable: No sanitization. Try <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code></small>
+                {% elif security_level == "MEDIUM" %}
+                <small class="text-warning">Partial: Only safe HTML tags allowed. Try event handlers: <code>&lt;img src=x onerror=alert(1)&gt;</code></small>
+                {% else %}
+                <small class="text-success">Secure: All HTML stripped. XSS prevented.</small>
+                {% endif %}
+            </div>
+        </div>
+
+        <h5>Comments:</h5>
+        {% for post in comments %}
+        <div class="card mb-2">
+            <div class="card-body">
+                <h6>{{ post.title }}</h6>
+                <p>{{ post.content | safe }}</p>
+                <small class="text-muted">{{ post.created_at }}</small>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5>XSS Types</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/vulns/xss">Stored XSS</a></li>
+                    <li><a href="/vulns/xss/reflected">Reflected XSS</a></li>
+                    <li><a href="/vulns/xss/dom">DOM-based XSS</a></li>
+                </ul>
+                <hr>
+                <h5>OWASP Reference</h5>
+                <a href="https://owasp.org/Top10/2025/A05_2025-Injection/" target="_blank" class="btn btn-outline-info btn-sm">Read More</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

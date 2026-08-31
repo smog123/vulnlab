@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Reflected XSS - A05{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h3>Reflected XSS</h3>
+        <p class="text-muted">A05: Injection - Reflected XSS - Difficulty: <strong>{{ security_level }}</strong></p>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Search</h5>
+                <form method="GET">
+                    <div class="input-group">
+                        <input type="text" name="name" class="form-control" placeholder="Enter your name..." value="{{ name }}">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+                {% if security_level == "LOW" %}
+                <small class="text-danger">Vulnerable: Try <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code> in the name field</small>
+                {% else %}
+                <small class="text-success">Output is escaped.</small>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if name %}
+        <div class="card">
+            <div class="card-body">
+                <h5>Results for: {% if security_level == "LOW" %}{{ name | safe }}{% else %}{{ name }}{% endif %}</h5>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

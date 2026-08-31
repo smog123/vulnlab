@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Data Integrity - A08{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h3>Data Integrity Failures</h3>
+        <p class="text-muted">A08: Data Integrity Failures - Difficulty: <strong>{{ security_level }}</strong></p>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>Insecure Deserialization</h5>
+                <p>Submit serialized data for processing.</p>
+                <a href="/vulns/integrity/deserialize" class="btn btn-info btn-sm">Try Deserialization</a>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>Cookie Tampering</h5>
+                <p>View and modify cookies.</p>
+                <a href="/vulns/integrity/cookies" class="btn btn-info btn-sm">Cookie Demo</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Mass Assignment - A06{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h3>Mass Assignment</h3>
+        <p class="text-muted">A06: Insecure Design - Difficulty: <strong>{{ security_level }}</strong></p>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Create User Profile</h5>
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control">
+                    </div>
+                    {% if security_level == "LOW" %}
+                    <div class="mb-3">
+                        <label class="form-label">Role</label>
+                        <select name="role" class="form-select">
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Admin</label>
+                        <select name="is_admin" class="form-select">
+                            <option value="false">No</option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </div>
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary">Create Profile</button>
+                </form>
+                {% if security_level == "LOW" %}
+                <small class="text-danger">Vulnerable: Role and admin fields exposed. Try setting yourself as admin.</small>
+                {% elif security_level == "MEDIUM" %}
+                <small class="text-warning">Partial: Role field removed but server doesn't validate.</small>
+                {% else %}
+                <small class="text-success">Secure: Only whitelisted fields accepted by server.</small>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if message %}
+        <div class="alert alert-info">{{ message }}</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

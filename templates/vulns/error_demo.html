@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Error Demo - A02{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h3>Verbose Error Messages</h3>
+        <p class="text-muted">A02: Security Misconfiguration - Difficulty: <strong>{{ security_level }}</strong></p>
+
+        <div class="card">
+            <div class="card-body">
+                <h5>Error Output:</h5>
+                <pre class="result-box">{{ error_info }}</pre>
+
+                {% if security_level == "LOW" %}
+                <div class="alert alert-danger mt-3">
+                    <strong>Vulnerable:</strong> Full stack trace exposed, revealing file paths, code structure, and Python version.
+                </div>
+                {% elif security_level == "MEDIUM" %}
+                <div class="alert alert-warning mt-3">
+                    <strong>Partial:</strong> Generic error message, but still reveals some internal state.
+                </div>
+                {% else %}
+                <div class="alert alert-success mt-3">
+                    <strong>Secure:</strong> Minimal error message, no internal details exposed.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
